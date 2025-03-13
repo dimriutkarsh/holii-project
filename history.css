@@ -15,7 +15,7 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
     color: var(--text-color);
-    background: url('/images/vibrant-holi-festival-colors-photo.jpg') fixed;
+    background: url('images/vibrant-holi-festival-colors-photo.jpg') fixed;
     background-size: cover;
     background-position: center;
     overflow-x: hidden;
