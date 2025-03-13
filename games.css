@@ -1,0 +1,185 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: url('https://images.unsplash.com/photo-1602631985686-1bb0e6a8696e?auto=format&fit=crop&q=80') center/cover no-repeat fixed;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Arial', sans-serif;
+    position: relative;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(107, 70, 193, 0.8) 0%, rgba(72, 52, 212, 0.8) 100%);
+    z-index: -1;
+}
+
+.game-container {
+    position: relative;
+    width: 800px;
+    height: 600px;
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    overflow: hidden;
+    animation: containerFloat 3s ease-in-out infinite;
+    backdrop-filter: blur(5px);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+@keyframes containerFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+canvas {
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    z-index: 10;
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+h1 {
+    font-size: 3.5em;
+    margin-bottom: 20px;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    animation: titleGlow 2s infinite alternate, titleFloat 3s ease-in-out infinite;
+    background: linear-gradient(90deg, #FF1744, #2979FF, #00E676, #FFEA00, #FF9100);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 400% 400%;
+    animation: titleGlow 2s infinite alternate, titleFloat 3s ease-in-out infinite, gradient 8s linear infinite;
+}
+
+@keyframes titleGlow {
+    from {
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+    to {
+        text-shadow: 0 0 20px rgba(255, 255, 255, 0.8),
+                     0 0 30px rgba(255, 0, 255, 0.6),
+                     0 0 40px rgba(255, 0, 0, 0.4);
+    }
+}
+
+@keyframes titleFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+button {
+    padding: 15px 30px;
+    font-size: 1.2em;
+    background: linear-gradient(45deg, #ff416c, #ff4b2b);
+    border: none;
+    border-radius: 25px;
+    color: white;
+    cursor: pointer;
+    margin: 20px 0;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+button::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transform: rotate(45deg);
+    animation: buttonShine 3s infinite;
+}
+
+@keyframes buttonShine {
+    0% { transform: translateX(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) rotate(45deg); }
+}
+
+button:hover {
+    transform: scale(1.05) translateY(-3px);
+    box-shadow: 0 10px 20px rgba(255, 65, 108, 0.3);
+}
+
+.game-stats {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 5;
+    display: flex;
+    gap: 20px;
+}
+
+.score, .time {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 12px 25px;
+    border-radius: 25px;
+    font-weight: bold;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+    animation: statsFloat 3s ease-in-out infinite;
+}
+
+.score {
+    animation-delay: 0s;
+}
+
+.time {
+    animation-delay: 0.5s;
+}
+
+@keyframes statsFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+#startScreen p {
+    font-size: 1.2em;
+    margin-top: 20px;
+    text-align: center;
+    animation: instructionsPulse 2s infinite;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+@keyframes instructionsPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holi Color Splash Game</title>
+    <link rel="stylesheet" href="/css/games.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="overlay" id="startScreen">
+            <h1>Holi Color Splash</h1>
+            <button id="startButton">Start Game</button>
+            <p>Click anywhere to throw colors!</p>
+        </div>
+        
+        <div class="game-stats">
+            <div class="score">Score: <span id="scoreValue">0</span></div>
+            <div class="time">Time: <span id="timeValue">30</span>s</div>
+        </div>
+        
+        <canvas id="gameCanvas"></canvas>
+        
+        <div class="overlay" id="gameOverScreen" style="display: none;">
+            <h2>Game Over!</h2>
+            <p>Final Score: <span id="finalScore">0</span></p>
+            <button id="restartButton">Play Again</button>
+        </div>
+    </div>
+    <script src="/js/games.js"></script>
+</body>
+</html>
