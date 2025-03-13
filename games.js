@@ -3,9 +3,9 @@ class ColorParticle {
         this.x = x;
         this.y = y;
         this.color = color;
-        this.size = Math.random() * 8 + 4; // Slightly larger particles
-        this.speedX = Math.random() * 8 - 4; // Reduced speed
-        this.speedY = (Math.random() * -8) - 2; // Gentler upward velocity
+        this.size = Math.random() * 8 + 4;
+        this.speedX = Math.random() * 8 - 4;
+        this.speedY = (Math.random() * -8) - 2;
         this.gravity = 0.2;
         this.life = 1;
         this.decay = Math.random() * 0.02 + 0.01;
@@ -17,7 +17,6 @@ class ColorParticle {
         this.y += this.speedY;
         this.life -= this.decay;
         
-        // Simple drag effect
         this.speedX *= 0.98;
         this.speedY *= 0.98;
     }
@@ -26,25 +25,23 @@ class ColorParticle {
         ctx.save();
         ctx.globalAlpha = this.life;
         ctx.fillStyle = this.color;
-        
-        // Simple circle particle
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fill();
-        
         ctx.restore();
     }
 }
 
 class Target {
-    constructor(canvas) {
+    constructor(canvas, speedMultiplier = 1) {
         this.canvas = canvas;
         this.size = Math.random() * 30 + 20;
         this.x = Math.random() * (canvas.width - this.size * 2) + this.size;
         this.y = Math.random() * (canvas.height - this.size * 2) + this.size;
-        this.speedX = (Math.random() - 0.5) * 3;
-        this.speedY = (Math.random() - 0.5) * 3;
-        this.color = this.getRandomColor();
+        this.speedX = ((Math.random() - 0.5) * 3) * speedMultiplier;
+        this.speedY = ((Math.random() - 0.5) * 3) * speedMultiplier;
+        this.isBlack = Math.random() < 0.2; // 20% chance of being black
+        this.color = this.isBlack ? '#000000' : this.getRandomColor();
         this.hit = false;
         this.disappearing = false;
         this.opacity = 1;
@@ -64,7 +61,6 @@ class Target {
         this.x += this.speedX;
         this.y += this.speedY;
         
-        // Simple boundary checking
         if (this.x <= this.size || this.x >= this.canvas.width - this.size) {
             this.speedX *= -1;
         }
@@ -76,12 +72,20 @@ class Target {
     draw(ctx) {
         ctx.save();
         ctx.globalAlpha = this.opacity;
-        
-        // Simple filled circle
         ctx.fillStyle = this.color;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fill();
+        
+        // Add warning symbol on black balls
+        if (this.isBlack && !this.disappearing) {
+            ctx.strokeStyle = '#FF0000';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(this.x - this.size/2, this.y);
+            ctx.lineTo(this.x + this.size/2, this.y);
+            ctx.stroke();
+        }
         
         ctx.restore();
     }
@@ -102,6 +106,8 @@ class Game {
         this.colors = ['#FF1744', '#2979FF', '#00E676', '#FFEA00', '#FF9100'];
         this.combo = 0;
         this.lastHitTime = 0;
+        this.speedMultiplier = 1;
+        this.difficultyInterval = null;
         
         this.setupEventListeners();
         this.initializeGame();
@@ -129,9 +135,10 @@ class Game {
         this.score = 0;
         this.timeLeft = 30;
         this.combo = 0;
+        this.speedMultiplier = 1;
         
         for (let i = 0; i < 5; i++) {
-            this.targets.push(new Target(this.canvas));
+            this.targets.push(new Target(this.canvas, this.speedMultiplier));
         }
         
         document.getElementById('scoreValue').textContent = this.score;
@@ -144,16 +151,33 @@ class Game {
         this.gameActive = true;
         this.gameLoop();
         this.startTimer();
+        this.startDifficultyProgression();
+    }
+
+    startDifficultyProgression() {
+        this.difficultyInterval = setInterval(() => {
+            this.speedMultiplier += 0.2;
+            // Update speeds of existing targets
+            this.targets.forEach(target => {
+                if (!target.disappearing) {
+                    target.speedX *= 1.2;
+                    target.speedY *= 1.2;
+                }
+            });
+        }, 5000); // Increase speed every 5 seconds
     }
 
     restartGame() {
+        if (this.difficultyInterval) {
+            clearInterval(this.difficultyInterval);
+        }
         this.initializeGame();
         this.startGame();
     }
 
     createColorSplash(x, y) {
         const color = this.colors[Math.floor(Math.random() * this.colors.length)];
-        const particleCount = 30; // Reduced particle count
+        const particleCount = 30;
         
         for (let i = 0; i < particleCount; i++) {
             this.particles.push(new ColorParticle(x, y, color));
@@ -172,20 +196,25 @@ class Game {
             if (distance < target.size) {
                 target.disappearing = true;
                 
-                if (now - this.lastHitTime < 1000) {
-                    this.combo++;
+                if (target.isBlack) {
+                    // Negative points for black balls
+                    this.score = Math.max(0, this.score - 200);
+                    this.combo = 0;
                 } else {
-                    this.combo = 1;
+                    if (now - this.lastHitTime < 1000) {
+                        this.combo++;
+                    } else {
+                        this.combo = 1;
+                    }
+                    const baseScore = 100;
+                    const comboBonus = this.combo * 50;
+                    this.score += baseScore + comboBonus;
+                    this.lastHitTime = now;
                 }
-                this.lastHitTime = now;
-                
-                const baseScore = 100;
-                const comboBonus = this.combo * 50;
-                this.score += baseScore + comboBonus;
                 
                 document.getElementById('scoreValue').textContent = this.score;
                 
-                // Simple splash effect
+                // Splash effect
                 for (let i = 0; i < 20; i++) {
                     this.particles.push(new ColorParticle(target.x, target.y, target.color));
                 }
@@ -193,7 +222,7 @@ class Game {
                 setTimeout(() => {
                     const index = this.targets.indexOf(target);
                     if (index > -1) {
-                        this.targets[index] = new Target(this.canvas);
+                        this.targets[index] = new Target(this.canvas, this.speedMultiplier);
                     }
                 }, 1000);
             }
@@ -207,6 +236,9 @@ class Game {
             
             if (this.timeLeft <= 0) {
                 clearInterval(timer);
+                if (this.difficultyInterval) {
+                    clearInterval(this.difficultyInterval);
+                }
                 this.endGame();
             }
         }, 1000);
