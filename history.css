@@ -1,0 +1,272 @@
+:root {
+    --primary-color: #ff4d6d;
+    --secondary-color: #4ea8de;
+    --text-color: #333;
+    --background-color: rgba(255, 255, 255, 0.15);
+  }
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background: url('/images/vibrant-holi-festival-colors-photo.jpg') fixed;
+    background-size: cover;
+    background-position: center;
+    overflow-x: hidden;
+    min-height: 100vh;
+    position: relative;
+  }
+  
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    z-index: -1;
+  }
+  
+  #app {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  header {
+    text-align: center;
+    padding: 3rem 0;
+    position: relative;
+  }
+  
+  .hero-image {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    margin: 2rem 0;
+    overflow: hidden;
+    border-radius: 20px;
+    background: var(--background-color);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .main-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+    opacity: 0.9;
+  }
+  
+  .hero-image:hover .main-image {
+    transform: scale(1.05);
+  }
+  
+  .color-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, rgba(255,77,109,0.3), rgba(78,168,222,0.3));
+    mix-blend-mode: color;
+    animation: colorShift 10s infinite alternate;
+  }
+  
+  h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    animation: textColorChange 8s infinite alternate;
+  }
+  
+  .story-section {
+    margin: 4rem 0;
+    padding: 2rem;
+    background: var(--background-color);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .story-section:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.2);
+  }
+  
+  .content-wrapper {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+  }
+  
+  .content-wrapper.reverse {
+    flex-direction: row-reverse;
+  }
+  
+  .text-content {
+    flex: 1;
+  }
+  
+  .image-wrapper {
+    flex: 1;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .section-image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+    opacity: 0.9;
+  }
+  
+  .image-wrapper:hover .section-image {
+    transform: scale(1.05);
+  }
+  
+  h2 {
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+    animation: textColorChange 6s infinite alternate;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  }
+  
+  p {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    line-height: 1.8;
+    color: #fff;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Animations */
+  .fade-in {
+    opacity: 0;
+    animation: fadeIn 1s ease-in forwards;
+  }
+  
+  .slide-in {
+    opacity: 0;
+    transform: translateX(-100px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  }
+  
+  .color-splash {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,77,109,0.2) 0%, rgba(78,168,222,0.2) 100%);
+    filter: blur(30px);
+    z-index: -1;
+    animation: colorPulse 5s infinite alternate;
+  }
+  
+  .story-section:nth-child(odd) .color-splash {
+    top: -50px;
+    right: -50px;
+  }
+  
+  .story-section:nth-child(even) .color-splash {
+    bottom: -50px;
+    left: -50px;
+  }
+  
+  #floating-colors div {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: -1;
+    animation: float var(--float-duration) linear infinite,
+               fadeInOut var(--fade-duration) ease-in-out infinite,
+               colorChange var(--color-duration) ease-in-out infinite;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes colorShift {
+    0% { background: linear-gradient(45deg, rgba(255,77,109,0.3), rgba(78,168,222,0.3)); }
+    50% { background: linear-gradient(45deg, rgba(255,217,61,0.3), rgba(108,99,255,0.3)); }
+    100% { background: linear-gradient(45deg, rgba(76,175,80,0.3), rgba(255,77,109,0.3)); }
+  }
+  
+  @keyframes textColorChange {
+    0% { color: #ff4d6d; }
+    25% { color: #4ea8de; }
+    50% { color: #ffd93d; }
+    75% { color: #6c63ff; }
+    100% { color: #4caf50; }
+  }
+  
+  @keyframes colorPulse {
+    0% { opacity: 0.2; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(1.2); }
+    100% { opacity: 0.2; transform: scale(1); }
+  }
+  
+  @keyframes float {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    50% { transform: translate(var(--x), var(--y)) rotate(180deg); }
+    100% { transform: translate(0, 0) rotate(360deg); }
+  }
+  
+  @keyframes fadeInOut {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 0.6; }
+  }
+  
+  @keyframes colorChange {
+    0% { background-color: var(--start-color); }
+    50% { background-color: var(--mid-color); }
+    100% { background-color: var(--end-color); }
+  }
+  
+  @media (max-width: 768px) {
+    #app {
+      padding: 1rem;
+    }
+  
+    h1 {
+      font-size: 2rem;
+    }
+  
+    .hero-image {
+      height: 250px;
+    }
+  
+    .content-wrapper {
+      flex-direction: column;
+    }
+  
+    .content-wrapper.reverse {
+      flex-direction: column;
+    }
+  
+    .story-section {
+      margin: 2rem 0;
+      padding: 1.5rem;
+    }
+  
+    .section-image {
+      height: 200px;
+    }
+  }
